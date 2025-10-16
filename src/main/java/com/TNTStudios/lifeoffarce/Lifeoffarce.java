@@ -1,6 +1,8 @@
 package com.TNTStudios.lifeoffarce;
 
+import com.TNTStudios.lifeoffarce.entity.ElCuatroBrazosEntity; // NUEVO
 import com.TNTStudios.lifeoffarce.entity.ElGiganteEntity;
+import com.TNTStudios.lifeoffarce.entity.client.ElCuatroBrazosRenderer; // NUEVO
 import com.TNTStudios.lifeoffarce.entity.client.ElGiganteRenderer;
 import com.TNTStudios.lifeoffarce.init.ModEntities;
 import com.TNTStudios.lifeoffarce.init.ModItems;
@@ -44,7 +46,7 @@ public class Lifeoffarce {
             .icon(() -> ModItems.EL_GIGANTE_SPAWN_EGG.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(ModItems.EL_GIGANTE_SPAWN_EGG.get());
-                // Aquí añadirás futuros items o huevos de spawn
+                output.accept(ModItems.EL_CUATRO_BRAZOS_SPAWN_EGG.get()); // MODIFICADO
             }).title(Component.translatable("creativetab.lof_tab")).build());
 
     public Lifeoffarce() {
@@ -52,7 +54,6 @@ public class Lifeoffarce {
 
         modEventBus.addListener(this::commonSetup);
 
-        // Registra tus inicializadores
         ModEntities.register(modEventBus);
         ModItems.register(modEventBus);
         BLOCKS.register(modEventBus);
@@ -71,11 +72,13 @@ public class Lifeoffarce {
 
     private void entityAttributeEvent(final EntityAttributeCreationEvent event) {
         event.put(ModEntities.EL_GIGANTE.get(), ElGiganteEntity.createAttributes().build());
+        event.put(ModEntities.EL_CUATRO_BRAZOS.get(), ElCuatroBrazosEntity.createAttributes().build()); // MODIFICADO
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(ModItems.EL_GIGANTE_SPAWN_EGG);
+            event.accept(ModItems.EL_CUATRO_BRAZOS_SPAWN_EGG); // MODIFICADO
         }
     }
 
@@ -90,6 +93,7 @@ public class Lifeoffarce {
         public static void onClientSetup(FMLClientSetupEvent event) {
             LOGGER.info("HELLO FROM CLIENT SETUP");
             EntityRenderers.register(ModEntities.EL_GIGANTE.get(), ElGiganteRenderer::new);
+            EntityRenderers.register(ModEntities.EL_CUATRO_BRAZOS.get(), ElCuatroBrazosRenderer::new); // MODIFICADO
         }
     }
 }

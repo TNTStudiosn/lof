@@ -15,17 +15,18 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onSpawnPlacementRegister(SpawnPlacementRegisterEvent event) {
-        // Esto está perfecto y se debe quedar.
-        // Define las condiciones FÍSICAS para el spawn (dónde puede aparecer).
-        // El biome modifier define los BIOMAS en los que puede aparecer.
-        // Ambos son necesarios.
         event.register(ModEntities.EL_GIGANTE.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.OR);
-    }
 
-    // La clase interna 'ForgeEvents' y el método 'onBiomeLoading' se han eliminado.
-    // Su lógica ahora vive en el archivo add_el_gigante_spawn.json
+        // --- NUEVO ---
+        event.register(ModEntities.EL_CUATRO_BRAZOS.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR);
+        // --- FIN NUEVO ---
+    }
 }

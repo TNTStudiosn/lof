@@ -15,7 +15,12 @@ public class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, Lifeoffarce.MODID);
 
     public static final RegistryObject<Item> EL_GIGANTE_SPAWN_EGG = ITEMS.register("el_gigante_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.EL_GIGANTE, 0x343434, 0x787878, new Item.Properties())); // Colores del huevo (primario, secundario)
+            () -> new ForgeSpawnEggItem(ModEntities.EL_GIGANTE, 0x343434, 0x787878, new Item.Properties()));
+
+    // --- NUEVO ---
+    public static final RegistryObject<Item> EL_CUATRO_BRAZOS_SPAWN_EGG = ITEMS.register("el_cuatro_brazos_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.EL_CUATRO_BRAZOS, 0x8B4513, 0x808080, new Item.Properties())); // Colores marrón y gris
+    // --- FIN NUEVO ---
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
