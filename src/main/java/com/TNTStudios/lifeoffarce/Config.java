@@ -10,41 +10,69 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    private static final ForgeConfigSpec.IntValue EL_GIGANTE_SPAWN_WEIGHT;
-    private static final ForgeConfigSpec.IntValue EL_GIGANTE_MIN_GROUP_SIZE;
-    private static final ForgeConfigSpec.IntValue EL_GIGANTE_MAX_GROUP_SIZE;
+    // --- TOGGLES DE SPAWN ---
+    // Estas son las únicas opciones que necesito, ya que los JSON manejan el resto.
+    private static final ForgeConfigSpec.BooleanValue EL_GIGANTE_SPAWN_ENABLED;
+    private static final ForgeConfigSpec.BooleanValue EL_CUATRO_BRAZOS_SPAWN_ENABLED;
+    private static final ForgeConfigSpec.BooleanValue MAYA_MASKA_SPAWN_ENABLED;
 
     static {
-        BUILDER.push("Spawning"); // Agrupo todo bajo la categoría 'Spawning' en el archivo de config.
-        EL_GIGANTE_SPAWN_WEIGHT = BUILDER
-                .comment("Peso de spawn para 'El Gigante'. Un valor más alto significa que aparece más a menudo. El de los zombis es 100 como referencia.")
-                .defineInRange("elGiganteSpawnWeight", 60, 1, 1000); // Por defecto es 20, relativamente raro.
+        // --- CATEGORÍA PARA LOS TOGGLES DE SPAWN ---
+        BUILDER.push("SpawnToggles");
+        BUILDER.comment("Controla si las entidades pueden spawnear naturalmente. (Requiere /lifeoffarce spawn reload para aplicar cambios manuales en el archivo)");
 
-        EL_GIGANTE_MIN_GROUP_SIZE = BUILDER
-                .comment("Tamaño mínimo del grupo en que 'El Gigante' aparece.")
-                .defineInRange("elGiganteMinGroupSize", 1, 1, 5); // Siempre aparecerá al menos 1.
+        EL_GIGANTE_SPAWN_ENABLED = BUILDER
+                .define("spawnElGigante", true);
 
-        EL_GIGANTE_MAX_GROUP_SIZE = BUILDER
-                .comment("Tamaño máximo del grupo en que 'El Gigante' aparece.")
-                .defineInRange("elGiganteMaxGroupSize", 1, 1, 5); // Y como máximo 1, porque es una entidad fuerte.
+        EL_CUATRO_BRAZOS_SPAWN_ENABLED = BUILDER
+                .define("spawnElCuatroBrazos", true);
+
+        MAYA_MASKA_SPAWN_ENABLED = BUILDER
+                .define("spawnMayaMaska", true);
+
         BUILDER.pop();
     }
 
-    static final ForgeConfigSpec SPEC = BUILDER.build();
+    public static final ForgeConfigSpec SPEC = BUILDER.build();
 
-    // Defino variables estáticas para poder acceder a estos valores desde cualquier parte del mod,
-    // por ejemplo, desde mi lógica de eventos de spawn.
-    public static int elGiganteSpawnWeight;
-    public static int elGiganteMinGroupSize;
-    public static int elGiganteMaxGroupSize;
+    // --- VARIABLES ESTÁTICAS PARA LOS TOGGLES ---
+    // Defino variables estáticas para poder acceder a estos valores desde mi evento (ModEvents.java).
+    public static boolean SPAWN_EL_GIGANTE;
+    public static boolean SPAWN_EL_CUATRO_BRAZOS;
+    public static boolean SPAWN_MAYA_MASKA;
 
 
+    // Este método se llama solo, no necesito llamarlo manually desde el comando.
+    // El comando solo necesita re-leer los valores de la config.
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
         // Cuando la configuración se carga (o recarga), actualizo mis variables.
         // Esto asegura que los valores estén siempre sincronizados con el archivo .toml.
-        elGiganteSpawnWeight = EL_GIGANTE_SPAWN_WEIGHT.get();
-        elGiganteMinGroupSize = EL_GIGANTE_MIN_GROUP_SIZE.get();
-        elGiganteMaxGroupSize = EL_GIGANTE_MAX_GROUP_SIZE.get();
+
+        // --- ACTUALIZO MIS VARIABLES ---
+        SPAWN_EL_GIGANTE = EL_GIGANTE_SPAWN_ENABLED.get();
+        SPAWN_EL_CUATRO_BRAZOS = EL_CUATRO_BRAZOS_SPAWN_ENABLED.get();
+        SPAWN_MAYA_MASKA = MAYA_MASKA_SPAWN_ENABLED.get();
+    }
+
+    /**
+     * Método helper para que mi comando pueda forzar la recarga de las variables estáticas
+     * después de cambiar un valor.
+     */
+    public static void refreshConfig() {
+        SPAWN_EL_GIGANTE = EL_GIGANTE_SPAWN_ENABLED.get();
+        SPAWN_EL_CUATRO_BRAZOS = EL_CUATRO_BRAZOS_SPAWN_ENABLED.get();
+        SPAWN_MAYA_MASKA = MAYA_MASKA_SPAWN_ENABLED.get();
+    }
+
+    // --- AÑADO MÉTODO PARA OBTENER LOS SPEC VALUES DESDE EL COMANDO ---
+    // Esto es necesario para que el comando /... set ... funcione
+    public static ForgeConfigSpec.BooleanValue getSpec(String mobName) {
+        return switch (mobName) {
+            case "el_gigante" -> EL_GIGANTE_SPAWN_ENABLED;
+            case "el_cuatro_brazos" -> EL_CUATRO_BRAZOS_SPAWN_ENABLED;
+            case "maya_maska" -> MAYA_MASKA_SPAWN_ENABLED;
+            default -> null;
+        };
     }
 }
