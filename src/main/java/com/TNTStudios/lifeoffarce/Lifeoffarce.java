@@ -1,9 +1,12 @@
+// src/main/java/com/TNTStudios/lifeoffarce/Lifeoffarce.java
 package com.TNTStudios.lifeoffarce;
 
-import com.TNTStudios.lifeoffarce.entity.ElCuatroBrazosEntity; // NUEVO
+import com.TNTStudios.lifeoffarce.entity.ElCuatroBrazosEntity;
 import com.TNTStudios.lifeoffarce.entity.ElGiganteEntity;
-import com.TNTStudios.lifeoffarce.entity.client.ElCuatroBrazosRenderer; // NUEVO
+import com.TNTStudios.lifeoffarce.entity.MayaMaskaEntity; // NUEVO
+import com.TNTStudios.lifeoffarce.entity.client.ElCuatroBrazosRenderer;
 import com.TNTStudios.lifeoffarce.entity.client.ElGiganteRenderer;
+import com.TNTStudios.lifeoffarce.entity.client.MayaMaskaRenderer; // NUEVO
 import com.TNTStudios.lifeoffarce.init.ModEntities;
 import com.TNTStudios.lifeoffarce.init.ModItems;
 import com.mojang.logging.LogUtils;
@@ -46,7 +49,8 @@ public class Lifeoffarce {
             .icon(() -> ModItems.EL_GIGANTE_SPAWN_EGG.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(ModItems.EL_GIGANTE_SPAWN_EGG.get());
-                output.accept(ModItems.EL_CUATRO_BRAZOS_SPAWN_EGG.get()); // MODIFICADO
+                output.accept(ModItems.EL_CUATRO_BRAZOS_SPAWN_EGG.get());
+                output.accept(ModItems.MAYA_MASKA_SPAWN_EGG.get()); // MODIFICADO
             }).title(Component.translatable("creativetab.lof_tab")).build());
 
     public Lifeoffarce() {
@@ -72,13 +76,15 @@ public class Lifeoffarce {
 
     private void entityAttributeEvent(final EntityAttributeCreationEvent event) {
         event.put(ModEntities.EL_GIGANTE.get(), ElGiganteEntity.createAttributes().build());
-        event.put(ModEntities.EL_CUATRO_BRAZOS.get(), ElCuatroBrazosEntity.createAttributes().build()); // MODIFICADO
+        event.put(ModEntities.EL_CUATRO_BRAZOS.get(), ElCuatroBrazosEntity.createAttributes().build());
+        event.put(ModEntities.MAYA_MASKA.get(), MayaMaskaEntity.createAttributes().build()); // MODIFICADO
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(ModItems.EL_GIGANTE_SPAWN_EGG);
-            event.accept(ModItems.EL_CUATRO_BRAZOS_SPAWN_EGG); // MODIFICADO
+            event.accept(ModItems.EL_CUATRO_BRAZOS_SPAWN_EGG);
+            event.accept(ModItems.MAYA_MASKA_SPAWN_EGG); // MODIFICADO
         }
     }
 
@@ -93,7 +99,8 @@ public class Lifeoffarce {
         public static void onClientSetup(FMLClientSetupEvent event) {
             LOGGER.info("HELLO FROM CLIENT SETUP");
             EntityRenderers.register(ModEntities.EL_GIGANTE.get(), ElGiganteRenderer::new);
-            EntityRenderers.register(ModEntities.EL_CUATRO_BRAZOS.get(), ElCuatroBrazosRenderer::new); // MODIFICADO
+            EntityRenderers.register(ModEntities.EL_CUATRO_BRAZOS.get(), ElCuatroBrazosRenderer::new);
+            EntityRenderers.register(ModEntities.MAYA_MASKA.get(), MayaMaskaRenderer::new); // MODIFICADO
         }
     }
 }

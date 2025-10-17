@@ -21,8 +21,16 @@ public class ModEvents {
                 Monster::checkMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.OR);
 
-        // --- NUEVO ---
         event.register(ModEntities.EL_CUATRO_BRAZOS.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkMonsterSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR);
+
+        // --- NUEVO ---
+        // Añado las reglas de spawn para 'Maya Maska'. Aparecerá en la superficie
+        // como los otros monstruos.
+        event.register(ModEntities.MAYA_MASKA.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules,
