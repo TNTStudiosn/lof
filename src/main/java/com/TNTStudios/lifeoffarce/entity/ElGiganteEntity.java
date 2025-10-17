@@ -102,14 +102,29 @@ public class ElGiganteEntity extends Monster implements GeoEntity {
     }
 
     // --- SONIDOS ---
+
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(SoundEvents.IRON_GOLEM_STEP, 0.15F, 1.0F);
+        // Pasos pesados y contundentes. Tu elección es perfecta.
+        this.playSound(SoundEvents.IRON_GOLEM_STEP, 0.2F, 1.0F);
     }
 
     @Override
-    protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.IRON_GOLEM_HURT, 1.0F, 1.0F);
+    protected net.minecraft.sounds.SoundEvent getAmbientSound() {
+        // Un gruñido grave y hueco, como el de un zombie grande.
+        return SoundEvents.ZOMBIFIED_PIGLIN_AMBIENT;
+    }
+
+    @Override
+    protected net.minecraft.sounds.SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        // El sonido metálico al recibir daño le da un toque único.
+        return SoundEvents.IRON_GOLEM_HURT;
+    }
+
+    @Override
+    protected net.minecraft.sounds.SoundEvent getDeathSound() {
+        // El sonido de algo grande y pesado cayendo al morir.
+        return SoundEvents.IRON_GOLEM_DEATH;
     }
 
     @Override

@@ -24,6 +24,7 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.sounds.SoundEvent;
 
 public class MayaMaskaEntity extends Monster implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -83,15 +84,30 @@ public class MayaMaskaEntity extends Monster implements GeoEntity {
     }
 
     // --- SONIDOS ---
-    // He usado sonidos de Enderman como placeholder, que creo que le van bien a un gusano gigante y raro.
+
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(SoundEvents.ENDERMAN_HURT, 0.15F, 1.0F);
+        // En lugar de "pasos", este sonido es como el de un cuerpo arrastrándose.
+        // El sonido del Silverfish es perfecto para esto.
+        this.playSound(SoundEvents.SILVERFISH_STEP, 0.25F, 1.0F);
     }
 
     @Override
-    protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.ENDERMAN_HURT, 1.0F, 1.0F);
+    protected SoundEvent getAmbientSound() {
+        // Un siseo o murmullo constante y bajo, muy de insecto.
+        return SoundEvents.ENDERMITE_AMBIENT;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        // Un chillido agudo y seco, como el de un caparazón rompiéndose.
+        return SoundEvents.ENDERMITE_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        // El sonido final de ser aplastado.
+        return SoundEvents.ENDERMITE_DEATH;
     }
 
     @Override

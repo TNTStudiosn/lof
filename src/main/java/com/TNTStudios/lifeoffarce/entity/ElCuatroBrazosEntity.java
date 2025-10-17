@@ -21,6 +21,7 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.sounds.SoundEvent;
 
 public class ElCuatroBrazosEntity extends Monster implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -80,15 +81,30 @@ public class ElCuatroBrazosEntity extends Monster implements GeoEntity {
     }
 
     // --- SONIDOS ---
-    // He usado sonidos de Zombie como base, puedes cambiarlos.
+// Propuesta: Sonidos de Bestia Bruta (Ravager / Piglin Brute)
+
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(SoundEvents.ZOMBIE_STEP, 0.15F, 1.0F);
+        // Sonido de pasos pesados, como una bestia grande.
+        this.playSound(SoundEvents.RAVAGER_STEP, 0.25F, 1.0F);
     }
 
     @Override
-    protected void playHurtSound(DamageSource source) {
-        this.playSound(SoundEvents.ZOMBIE_HURT, 1.0F, 1.0F);
+    protected SoundEvent getAmbientSound() {
+        // Un gruñido grave y amenazante de vez en cuando.
+        return SoundEvents.PIGLIN_BRUTE_AMBIENT;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        // Un rugido de dolor y furia.
+        return SoundEvents.RAVAGER_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        // Un último estertor de bestia derrotada.
+        return SoundEvents.PIGLIN_BRUTE_DEATH;
     }
 
     @Override
