@@ -14,14 +14,20 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, Lifeoffarce.MODID);
 
+    // --- CORREGIDO ---
+    // He envuelto la referencia a la entidad en una lambda () -> ModEntities.ENTITY.get()
+    // Esto soluciona un problema de orden de carga. Asegura que el tipo de entidad
+    // se resuelva solo cuando sea necesario, evitando que el item se registre
+    // antes de que la entidad esté completamente disponible.
     public static final RegistryObject<Item> EL_GIGANTE_SPAWN_EGG = ITEMS.register("el_gigante_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.EL_GIGANTE, 0x343434, 0x787878, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(() -> ModEntities.EL_GIGANTE.get(), 0x343434, 0x787878, new Item.Properties()));
 
     public static final RegistryObject<Item> EL_CUATRO_BRAZOS_SPAWN_EGG = ITEMS.register("el_cuatro_brazos_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.EL_CUATRO_BRAZOS, 0x353434, 0x808080, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(() -> ModEntities.EL_CUATRO_BRAZOS.get(), 0x3A2E2E, 0x4F7942, new Item.Properties()));
 
     public static final RegistryObject<Item> MAYA_MASKA_SPAWN_EGG = ITEMS.register("maya_maska_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.MAYA_MASKA, 0x967969, 0x4f4f4f, new Item.Properties()));
+            () -> new ForgeSpawnEggItem(() -> ModEntities.MAYA_MASKA.get(), 0x967969, 0x4f4f4f, new Item.Properties()));
+    // --- FIN CORREGIDO ---
 
     // --- NUEVOS ITEMS ---
     // Aquí registramos cada uno de los nuevos ítems que solicitaste.
