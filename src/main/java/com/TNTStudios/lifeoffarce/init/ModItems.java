@@ -14,11 +14,6 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, Lifeoffarce.MODID);
 
-    // --- CORREGIDO ---
-    // He envuelto la referencia a la entidad en una lambda () -> ModEntities.ENTITY.get()
-    // Esto soluciona un problema de orden de carga. Asegura que el tipo de entidad
-    // se resuelva solo cuando sea necesario, evitando que el item se registre
-    // antes de que la entidad esté completamente disponible.
     public static final RegistryObject<Item> EL_GIGANTE_SPAWN_EGG = ITEMS.register("el_gigante_spawn_egg",
             () -> new ForgeSpawnEggItem(() -> ModEntities.EL_GIGANTE.get(), 0x343434, 0x787878, new Item.Properties()));
 
@@ -27,11 +22,7 @@ public class ModItems {
 
     public static final RegistryObject<Item> MAYA_MASKA_SPAWN_EGG = ITEMS.register("maya_maska_spawn_egg",
             () -> new ForgeSpawnEggItem(() -> ModEntities.MAYA_MASKA.get(), 0x967969, 0x4f4f4f, new Item.Properties()));
-    // --- FIN CORREGIDO ---
 
-    // --- NUEVOS ITEMS ---
-    // Aquí registramos cada uno de los nuevos ítems que solicitaste.
-    // Simplemente creamos un nuevo 'Item' con propiedades básicas.
     public static final RegistryObject<Item> MEDALLA_COCINA = ITEMS.register("medalla_cocina",
             () -> new Item(new Item.Properties()));
 
@@ -52,7 +43,6 @@ public class ModItems {
 
     public static final RegistryObject<Item> TICKET = ITEMS.register("ticket",
             () -> new Item(new Item.Properties()));
-    // --- FIN NUEVOS ITEMS ---
 
 
     public static void register(IEventBus eventBus) {
