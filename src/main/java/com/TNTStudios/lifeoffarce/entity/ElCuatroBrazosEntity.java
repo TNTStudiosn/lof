@@ -80,6 +80,21 @@ public class ElCuatroBrazosEntity extends Monster implements GeoEntity {
         return PlayState.STOP;
     }
 
+    @Override
+    public void aiStep() {
+        if (this.isAlive()) {
+            boolean isDay = this.level().isDay() && !this.level().isClientSide();
+            if (isDay) {
+                float brightness = this.getLightLevelDependentMagicValue();
+                BlockPos pos = this.blockPosition();
+                if (brightness > 0.5F && this.level().canSeeSky(pos)) {
+                    this.setSecondsOnFire(8);
+                }
+            }
+        }
+        super.aiStep();
+    }
+
     // --- SONIDOS ---
 // Propuesta: Sonidos de Bestia Bruta (Ravager / Piglin Brute)
 
