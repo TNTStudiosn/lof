@@ -4,9 +4,9 @@
   "spawners": [
     {
       "type": "lifeoffarce:maya_maska",
-      "weight": 50,
+      "weight": 70,
       "minCount": 1,
-      "maxCount": 1
+      "maxCount": 4
     }
   ]
 }

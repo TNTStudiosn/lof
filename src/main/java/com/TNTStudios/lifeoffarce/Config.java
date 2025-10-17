@@ -10,10 +10,6 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 public class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    // He añadido una sección de configuración para el spawn de 'El Gigante'.
-    // Esto es crucial para la optimización en servidores, ya que permite a los administradores
-    // ajustar la frecuencia de aparición sin tocar el código. Si el servidor experimenta
-    // carga alta, pueden reducir el 'peso' para que aparezcan menos gigantes.
     private static final ForgeConfigSpec.IntValue EL_GIGANTE_SPAWN_WEIGHT;
     private static final ForgeConfigSpec.IntValue EL_GIGANTE_MIN_GROUP_SIZE;
     private static final ForgeConfigSpec.IntValue EL_GIGANTE_MAX_GROUP_SIZE;

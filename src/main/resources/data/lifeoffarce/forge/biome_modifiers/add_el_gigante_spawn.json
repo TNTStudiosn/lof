@@ -4,9 +4,9 @@
   "spawners": [
     {
       "type": "lifeoffarce:el_gigante",
-      "weight": 60,
+      "weight": 70,
       "minCount": 1,
-      "maxCount": 1
+      "maxCount": 4
     }
   ]
 }
