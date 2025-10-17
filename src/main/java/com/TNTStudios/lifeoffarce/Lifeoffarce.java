@@ -10,14 +10,15 @@ import com.TNTStudios.lifeoffarce.entity.client.MayaMaskaRenderer;
 import com.TNTStudios.lifeoffarce.init.ModEntities;
 import com.TNTStudios.lifeoffarce.init.ModItems;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -83,7 +84,15 @@ public class Lifeoffarce {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        LOGGER.info("HELLO FROM COMMON SETUP");
+        // Muevo aquí el registro de las reglas de spawn.
+        // Esto es más seguro y garantiza que las entidades ya existen cuando se intentan registrar sus reglas.
+        event.enqueueWork(() -> {
+            SpawnPlacements.register(ModEntities.EL_GIGANTE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
+            SpawnPlacements.register(ModEntities.EL_CUATRO_BRAZOS.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
+            SpawnPlacements.register(ModEntities.MAYA_MASKA.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
+        });
+
+        LOGGER.info("Reglas de spawn para entidades registradas en commonSetup.");
     }
 
     private void entityAttributeEvent(final EntityAttributeCreationEvent event) {
