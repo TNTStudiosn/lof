@@ -19,7 +19,7 @@ public class ModCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         // Comando principal: /lifeoffarce
         LiteralArgumentBuilder<CommandSourceStack> command = Commands.literal(Lifeoffarce.MODID)
-                .requires(source -> source.hasPermission(2)) // Requiere OP Nivel 2 (admin)
+                .requires(source -> source.hasPermission(4)) // Requiere OP Nivel 2 (admin)
 
                 // Subcomando: /lifeoffarce spawn ...
                 .then(Commands.literal("spawn")
