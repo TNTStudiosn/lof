@@ -3,7 +3,9 @@ package com.TNTStudios.lifeoffarce.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -60,8 +62,12 @@ public class MayaMaskaEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "locomotion_controller", 5, this::locomotionPredicate));
-        controllers.add(new AnimationController<>(this, "attack_controller", 0, this::attackPredicate));
+        controllers.add(new AnimationController<>(this, "locomotion_controller", 2, this::locomotionPredicate));
+
+        controllers.add(
+                new AnimationController<>(this, "attack_controller", 0, state -> PlayState.STOP)
+                        .triggerableAnim("attack", ATTACK_ANIM)
+        );
     }
 
     // Este predicado controla las animaciones de movimiento (idle/walk).
@@ -96,6 +102,19 @@ public class MayaMaskaEntity extends Monster implements GeoEntity {
             }
         }
         super.aiStep();
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        boolean hit = super.doHurtTarget(target);
+        if (hit) {
+            // Marca el swing vanilla (útil para sonido/partículas)
+            this.swing(InteractionHand.MAIN_HAND);
+
+            // Dispara el trigger del controller de ataque
+            this.triggerAnim("attack_controller", "attack");
+        }
+        return hit;
     }
 
     // --- SONIDOS ---

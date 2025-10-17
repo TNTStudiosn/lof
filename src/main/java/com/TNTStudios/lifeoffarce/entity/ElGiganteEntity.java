@@ -3,7 +3,9 @@ package com.TNTStudios.lifeoffarce.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -56,9 +58,14 @@ public class ElGiganteEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "locomotion_controller", 5, this::locomotionPredicate));
-        controllers.add(new AnimationController<>(this, "attack_controller", 0, this::attackPredicate));
+        controllers.add(new AnimationController<>(this, "locomotion_controller", 2, this::locomotionPredicate));
+
+        controllers.add(
+                new AnimationController<>(this, "attack_controller", 0, state -> PlayState.STOP)
+                        .triggerableAnim("attack", ATTACK_ANIM)
+        );
     }
+
 
     // Predicado para el movimiento (caminar/estar quieto)
     private <E extends GeoEntity> PlayState locomotionPredicate(AnimationState<E> event) {
@@ -72,15 +79,14 @@ public class ElGiganteEntity extends Monster implements GeoEntity {
     }
 
     // Predicado solo para el ataque
-    private <E extends GeoEntity> PlayState attackPredicate(AnimationState<E> event) {
-        // La variable 'swinging' de la entidad vanilla nos dice cuándo está atacando.
+    private <E extends GeoEntity> PlayState attackPredicate(AnimationState<E> state) {
         if (this.swinging) {
-            event.getController().setAnimation(ATTACK_ANIM);
-            return PlayState.CONTINUE;
+            // Mejor usar state.setAndContinue(...) para mantener estilo de GeckoLib
+            return state.setAndContinue(ATTACK_ANIM);
         }
 
-        // MEJORA 2: Si no está atacando, detenemos este controlador.
-        // Esto permite que el controlador de locomoción tenga control total sobre el modelo.
+        // IMPORTANTE: sin esto, un thenPlay() sólo se reproduce una vez.
+        state.resetCurrentAnimation();
         return PlayState.STOP;
     }
 
@@ -99,6 +105,19 @@ public class ElGiganteEntity extends Monster implements GeoEntity {
             }
         }
         super.aiStep();
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        boolean hit = super.doHurtTarget(target);
+        if (hit) {
+            // Marca el swing vanilla (útil para sonido/partículas)
+            this.swing(InteractionHand.MAIN_HAND);
+
+            // Dispara el trigger del controller de ataque
+            this.triggerAnim("attack_controller", "attack");
+        }
+        return hit;
     }
 
     // --- SONIDOS ---
